@@ -19,7 +19,7 @@ class RegisterPage extends StatelessWidget {
             children: [
               SizedBox(height: 20.h),
               IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () => Navigator.pop(context),
               ),
               SizedBox(height: 40.h),
@@ -51,27 +51,27 @@ class RegisterPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Agree and Register',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Center(
                 child: RichText(
                   text: TextSpan(
                     text: "Already have an account? ",
-                    style: TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: Colors.grey),
                     children: [
                       TextSpan(
                         text: 'Login',
-                        style: TextStyle(color: Colors.blue),
+                        style: const TextStyle(color: Colors.blue),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
+                                  builder: (context) => const LoginPage()),
                             );
                           },
                       ),
@@ -92,7 +92,7 @@ class RegisterPage extends StatelessWidget {
       obscureText: isPassword,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey),
+        hintStyle: const TextStyle(color: Colors.grey),
         fillColor: Colors.grey[900],
         filled: true,
         border: OutlineInputBorder(

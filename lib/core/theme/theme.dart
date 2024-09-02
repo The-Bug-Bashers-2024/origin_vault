@@ -13,7 +13,7 @@ class Apptheme {
       contentPadding: const EdgeInsets.all(69 - 45),
       filled: true,
       fillColor: AppPallete.fieldcolor,
-      prefixIconColor: AppPallete.buttoncolor,
+      prefixIconColor: AppPallete.iconColor,
       hintStyle: const TextStyle(
         fontWeight: FontWeight.w300,
       ),

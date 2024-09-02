@@ -1,196 +1,196 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:origin_vault/core/theme/app_pallete.dart';
+import 'package:origin_vault/screens/admin_level/presentation/pages/admin_sidebar.dart';
 
-void main() {
-  runApp(MyApp());
+// Assume you have a SideMenu widget already implemented
+// import 'side_menu.dart';
+
+class DashboardScreen extends StatefulWidget {
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Origin Vault Dashboard',
-      theme: ThemeData.dark().copyWith(
-        primaryColor: AppPallete.backgroundColor,
-        scaffoldBackgroundColor: AppPallete.backgroundColor,
-      ),
-      home: DashboardScreen(),
-    );
-  }
-}
+class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class DashboardScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: DashboardContent(),
-    );
-  }
-}
-
-class DashboardContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildTopBar() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
+      color:
+          AppPallete.backgroundColor, // Make the top bar fixed and consistent
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Hello Admin\nWelcome Back!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              Icon(Icons.notifications, color: Colors.cyan),
-            ],
+          IconButton(
+            icon: const Icon(Icons.menu, color: Colors.cyan),
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer(); // Open the sidebar
+            },
           ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(child: _buildInfoCard('User Count', '3877', '11.75%')),
-              SizedBox(width: 16),
-              Expanded(
-                  child: _buildInfoCard(
-                      'System Status', 'ACTIVE', 'Up-time Rate: 11.75%')),
-            ],
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.cyan),
+            onPressed: () {
+              // Handle notification action
+            },
           ),
-          SizedBox(height: 20),
-          _buildSectionHeader('Recent Activities'),
-          _buildRecentActivities(),
-          SizedBox(height: 20),
-          _buildSectionHeader('Recent Transactions'),
-          _buildRecentTransactions(),
-          Spacer(),
-          _buildBottomNavBar(),
         ],
       ),
     );
   }
 
-  Widget _buildInfoCard(String title, String mainInfo, String subInfo) {
-    return Card(
-      color: Colors.grey[800],
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: AppPallete.backgroundColor,
+      drawer: SideMenu(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+        backgroundColor: AppPallete.secondarybackgroundColor,
+        foregroundColor: AppPallete.textcolor1,
+        elevation: 0,
+        shape: CircleBorder(),
+        mini: false,
+      ),
+      bottomNavigationBar: const BottomAppBar(
+        notchMargin: 10.0,
+        shape: CircularNotchedRectangle(),
+        color: AppPallete.secondarybackgroundColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Text(title, style: TextStyle(color: Colors.grey)),
-            SizedBox(height: 8),
-            Text(mainInfo,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text(subInfo, style: TextStyle(color: Colors.cyan)),
-            SizedBox(height: 16),
-            Container(
-              height: 50,
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(show: false),
-                  borderData: FlBorderData(show: false),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: [
-                        FlSpot(0, 3),
-                        FlSpot(2.6, 2),
-                        FlSpot(4.9, 5),
-                        FlSpot(6.8, 3.1),
-                        FlSpot(8, 4),
-                        FlSpot(9.5, 3),
-                        FlSpot(11, 4),
-                      ],
-                      isCurved: true,
-                      color: Colors.cyan,
-                      barWidth: 3,
-                      dotData: FlDotData(show: false),
-                      belowBarData: BarAreaData(show: false),
-                    ),
-                  ],
-                ),
+            Padding(
+              padding: EdgeInsets.only(left: 10.0, top: 10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.home, color: Colors.white),
+                  Text("Home", style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 20.0, top: 10.0, bottom: 1.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.shopping_cart, color: Colors.white),
+                  Text("Shop", style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 1.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.favorite, color: Colors.white),
+                  Text("Fav", style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10.0, top: 10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.settings, color: Colors.white),
+                  Text("Setting", style: TextStyle(color: Colors.white)),
+                ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        TextButton(
-          child: Text('View All', style: TextStyle(color: Colors.cyan)),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRecentActivities() {
-    return Column(
-      children: List.generate(2, (index) {
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.cyan,
-            child: Icon(Icons.description, color: Colors.white),
-          ),
-          title: Text('Activity message'),
-          subtitle: Text('accessed by username'),
-          trailing: Text('Date-Time'),
-        );
-      }),
-    );
-  }
-
-  Widget _buildRecentTransactions() {
-    return Column(
-      children: List.generate(2, (index) {
-        return ListTile(
-          title: Text('Transaction Type'),
-          subtitle: Text('transaction detail'),
-          trailing: Text('\$99,284.01', style: TextStyle(color: Colors.cyan)),
-        );
-      }),
-    );
-  }
-
-  Widget _buildBottomNavBar() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Colors.grey[800],
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Column(
         children: [
-          _buildNavBarItem(Icons.home, 'Home', isSelected: true),
-          _buildNavBarItem(Icons.person, 'Users'),
-          _buildNavBarItem(Icons.computer, 'System'),
-          _buildNavBarItem(Icons.bar_chart, 'Reports'),
-          _buildNavBarItem(Icons.attach_money, 'Access Control'),
+          _buildTopBar(), // Top bar remains fixed
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Hello Admin',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    const Text(
+                      'Welcome Back!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildDataBox(
+                            'User Count',
+                            '3877',
+                            '+11.75%',
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: _buildDataBox(
+                            'System Status',
+                            'ACTIVE',
+                            'Up-time Rate: 11.75%',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildNavBarItem(IconData icon, String label,
-      {bool isSelected = false}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: isSelected ? Colors.cyan : Colors.grey),
-        Text(label,
-            style: TextStyle(
-                color: isSelected ? Colors.cyan : Colors.grey, fontSize: 12)),
-      ],
+  Widget _buildDataBox(String title, String value, String subValue) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppPallete.secondarybackgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(color: AppPallete.textcolor1, fontSize: 20),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            subValue,
+            style: const TextStyle(color: Colors.cyan),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            height: 50,
+          ),
+        ],
+      ),
     );
   }
 }
