@@ -147,6 +147,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20),
+                    _buildRecentActivities(), // Recent Activities Section
                   ],
                 ),
               ),
@@ -188,6 +190,92 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 16),
           Container(
             height: 50,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentActivities() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppPallete.secondarybackgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Recent Activities',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: _buildActivityCard(
+                  'Activity Type',
+                  'activity message accessed by username',
+                  'Date-Time',
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildActivityCard(
+                  'Activity Type',
+                  'activity message accessed by username',
+                  'Date-Time',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: TextButton(
+              onPressed: () {},
+              child:
+                  const Text('View All', style: TextStyle(color: Colors.cyan)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityCard(String title, String description, String date) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppPallete.backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: AppPallete.textcolor1,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: const TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            date,
+            style: const TextStyle(color: Colors.cyan),
           ),
         ],
       ),
