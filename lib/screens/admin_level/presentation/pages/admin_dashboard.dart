@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:origin_vault/core/theme/app_pallete.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/admin_sidebar.dart';
 
@@ -45,60 +47,85 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: AppPallete.backgroundColor,
       drawer: SideMenu(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-        backgroundColor: AppPallete.secondarybackgroundColor,
-        foregroundColor: AppPallete.textcolor1,
-        elevation: 0,
-        shape: CircleBorder(),
-        mini: false,
+      floatingActionButton: Container(
+        height:
+            80.h, // Adjust the height to give space for both the icon and text
+        width: 80.w, // Adjust the width if necessary
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: AppPallete.secondarybackgroundColor,
+          elevation: 0,
+          shape: const CircleBorder(),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Iconsax.house_2,
+                size: 24, // Icon size
+                color: AppPallete.iconColor,
+              ),
+              SizedBox(height: 5), // Space between icon and text
+              Text(
+                'Home', // Replace with the text you want
+                style: TextStyle(
+                  color: AppPallete.iconColor,
+                  fontSize: 12, // Font size for the text
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: const BottomAppBar(
-        notchMargin: 10.0,
+        notchMargin: 8.0,
         shape: CircularNotchedRectangle(),
         color: AppPallete.secondarybackgroundColor,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 10.0, top: 10.0),
+              padding: EdgeInsets.only(left: 10.0, top: 8.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.home, color: Colors.white),
-                  Text("Home", style: TextStyle(color: Colors.white)),
+                  Icon(Iconsax.people, color: AppPallete.iconColor),
+                  SizedBox(height: 3),
+                  Text("Users", style: TextStyle(color: AppPallete.iconColor)),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(right: 20.0, top: 10.0, bottom: 1.0),
+              padding: EdgeInsets.only(right: 20.0, top: 8.0, bottom: 1.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.shopping_cart, color: Colors.white),
-                  Text("Shop", style: TextStyle(color: Colors.white)),
+                  Icon(Iconsax.monitor_mobbile, color: AppPallete.iconColor),
+                  SizedBox(height: 3),
+                  Text("System", style: TextStyle(color: AppPallete.iconColor)),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 1.0),
+              padding: EdgeInsets.only(left: 20.0, top: 8.0, bottom: 1.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.favorite, color: Colors.white),
-                  Text("Fav", style: TextStyle(color: Colors.white)),
+                  Icon(Iconsax.status_up, color: AppPallete.iconColor),
+                  SizedBox(height: 3),
+                  Text("Reports",
+                      style: TextStyle(color: AppPallete.iconColor)),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(right: 10.0, top: 10.0),
+              padding: EdgeInsets.only(right: 10.0, top: 8.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.settings, color: Colors.white),
-                  Text("Setting", style: TextStyle(color: Colors.white)),
+                  Icon(Iconsax.document_text, color: AppPallete.iconColor),
+                  SizedBox(height: 3),
+                  Text("Audits", style: TextStyle(color: AppPallete.iconColor)),
                 ],
               ),
             ),
