@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:origin_vault/core/common/common_pages/loginpage.dart';
+import 'package:origin_vault/core/common/common_pages/registerpage.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
                             Colors.white.withOpacity(0.05),
                             Colors.transparent,
                           ],
-                          stops: [0.5, 0.3, 0.7, 1.0],
+                          stops: const [0.5, 0.3, 0.7, 1.0],
                           center: Alignment.center,
                           radius: 10, // Full radius within the container
                         ),
@@ -60,7 +61,7 @@ class HomePage extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
@@ -73,7 +74,8 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -85,7 +87,7 @@ class HomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Login',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -93,7 +95,14 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 10.h),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterPage(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       Colors.white, // Background color of the button
@@ -103,7 +112,7 @@ class HomePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Register',
                   style: TextStyle(color: Colors.black),
                 ),

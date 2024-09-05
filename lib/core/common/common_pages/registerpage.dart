@@ -1,11 +1,97 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:origin_vault/core/common/common_pages/loginpage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final supabase =
+      SupabaseClient(dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!);
+  late TextEditingController _username;
+  late TextEditingController _email;
+  late TextEditingController _password;
+  late TextEditingController _confirmpassword;
+
+  @override
+  void initState() {
+    super.initState();
+    _username = TextEditingController();
+    _email = TextEditingController();
+    _password = TextEditingController();
+    _confirmpassword = TextEditingController();
+  }
+
+  Future<void> insertFormData() async {
+    final email = _email.text.trim();
+    final password = _password.text.trim();
+    final confirmpassword = _confirmpassword.text.trim();
+
+    if (password != confirmpassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords don\'t match'),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: {'username': _username.text.trim()},
+      );
+
+      if (response.user != null) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Signup Successful'),
+          ),
+        );
+        Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error occured during signup'),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('$e');
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _username.dispose();
+    _email.dispose();
+    _password.dispose();
+    _confirmpassword.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +118,18 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40.h),
-              _buildTextField('Username'),
+              _buildTextField('Username', _username),
               SizedBox(height: 16.h),
-              _buildTextField('Email'),
+              _buildTextField('Email', _email),
               SizedBox(height: 16.h),
-              _buildTextField('Password', isPassword: true),
+              _buildTextField('Password', _password, isPassword: true),
               SizedBox(height: 16.h),
-              _buildTextField('Confirm password', isPassword: true),
+              _buildTextField('Confirm password', _confirmpassword,
+                  isPassword: true),
               SizedBox(height: 24.h),
               ElevatedButton(
                 onPressed: () {
-                  // Handle registration
+                  insertFormData();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -87,8 +174,10 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hintText, {bool isPassword = false}) {
+  Widget _buildTextField(String hintText, TextEditingController controller,
+      {bool isPassword = false}) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         hintText: hintText,
