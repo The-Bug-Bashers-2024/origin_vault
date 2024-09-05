@@ -52,7 +52,7 @@ class PasswordChangedPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(builder: (context) => Loginpage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
