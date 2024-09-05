@@ -1,6 +1,7 @@
 // File: sidebar.dart
 
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class SideMenu extends StatelessWidget {
   @override
@@ -25,39 +26,25 @@ class SideMenu extends StatelessWidget {
           Text('ADMIN', style: TextStyle(color: Colors.white)),
           SizedBox(height: 30),
           ListTile(
-            leading: Icon(Icons.dashboard, color: Colors.cyan),
+            leading: Icon(Iconsax.element_equal),
             title: Text('Dashboard', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navigate to Dashboard
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings, color: Colors.cyan),
+            leading: Icon(Iconsax.setting_2),
             title: Text('Settings', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navigate to Settings
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout, color: Colors.cyan),
+            leading: Icon(Iconsax.logout),
             title: Text('Logout', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Perform logout action
             },
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              child: Text('Create Teams'),
-              onPressed: () {
-                // Action for creating teams
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[800],
-                minimumSize: Size(double.infinity, 50),
-              ),
-            ),
           ),
         ],
       ),
