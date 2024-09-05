@@ -8,16 +8,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.sup.env');
+
   await Supabase.initialize(
       url: dotenv.env['SUPABASE_URL'] ?? '',
       anonKey: dotenv.env['SUPABASE_KEY'] ?? '',
-      authOptions: const FlutterAuthClientOptions(
-        authFlowType: AuthFlowType.pkce,
-      ),
-      realtimeClientOptions: const RealtimeClientOptions(
-        eventsPerSecond: 2,
-      ),
-      storageOptions: const StorageClientOptions(retryAttempts: 3));
+      debug: true);
   runApp(const MyApp());
 }
 

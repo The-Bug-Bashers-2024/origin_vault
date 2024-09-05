@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:origin_vault/core/common/common_pages/loginpage.dart';
+import 'package:origin_vault/core/link/custom_rest_api.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -16,24 +17,21 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final supabase =
       SupabaseClient(dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!);
-  late TextEditingController _username;
-  late TextEditingController _email;
-  late TextEditingController _password;
-  late TextEditingController _confirmpassword;
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _username = TextEditingController();
-    _email = TextEditingController();
-    _password = TextEditingController();
-    _confirmpassword = TextEditingController();
   }
 
   Future<void> insertFormData() async {
     final email = _email.text.trim();
     final password = _password.text.trim();
-    final confirmpassword = _confirmpassword.text.trim();
+    final confirmpassword = _confirmPassword.text.trim();
+    final username = _username.text.trim();
 
     if (password != confirmpassword) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -45,41 +43,24 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     try {
-      final response = await supabase.auth.signUp(
+      await CustomAuthService.signUp(
         email: email,
         password: password,
-        data: {'username': _username.text.trim()},
+        username: username,
       );
 
-      if (response.user != null) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Signup Successful'),
-          ),
-        );
-        Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
-        );
-      } else {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error occured during signup'),
-          ),
-        );
-      }
-    } catch (e) {
-      debugPrint('$e');
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-        ),
+        const SnackBar(content: Text('Sign-up Successful')),
+      );
+      // Navigate to login page or home page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Loginpage()),
+      );
+    } catch (e) {
+      // Handle sign-up error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
       );
     }
   }
@@ -89,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _username.dispose();
     _email.dispose();
     _password.dispose();
-    _confirmpassword.dispose();
+    _confirmPassword.dispose();
     super.dispose();
   }
 
@@ -124,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 16.h),
               _buildTextField('Password', _password, isPassword: true),
               SizedBox(height: 16.h),
-              _buildTextField('Confirm password', _confirmpassword,
+              _buildTextField('Confirm password', _confirmPassword,
                   isPassword: true),
               SizedBox(height: 24.h),
               ElevatedButton(
@@ -158,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
+                                  builder: (context) => const Loginpage()),
                             );
                           },
                       ),
