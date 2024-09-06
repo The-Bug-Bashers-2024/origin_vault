@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:origin_vault/core/theme/app_pallete.dart';
+import 'package:origin_vault/core/widgets/qr_scanner.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/admin_sidebar.dart';
 import 'package:origin_vault/screens/producer_level/presentation/pages/add_product_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -40,6 +41,34 @@ class _ConsumerdashboardState extends State<Consumerdashboard> {
         _isLoading = false;
       });
     }
+  }
+
+  Widget _buildScannerButton(
+      IconData icon, String label, VoidCallback onPressed) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppPallete.secondarybackgroundColor,
+          padding: EdgeInsets.symmetric(vertical: 20.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: Colors.cyan, size: 40.sp),
+            SizedBox(height: 8.h),
+            Text(
+              label,
+              style: TextStyle(color: Colors.white, fontSize: 16.sp),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildTopBar() {
@@ -208,6 +237,42 @@ class _ConsumerdashboardState extends State<Consumerdashboard> {
                         fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      children: [
+                        _buildScannerButton(
+                          Iconsax
+                              .scanner, // You might need to replace this with a more appropriate QR code icon
+                          'QR\nScanner',
+                          () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const QrScannerPage();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(width: 16.w),
+                        _buildScannerButton(
+                          Iconsax
+                              .barcode, // You might need to replace this with a more appropriate barcode icon
+                          'Barcode\nScanner',
+                          () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const QrScannerPage();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
