@@ -5,16 +5,17 @@ import 'package:iconsax/iconsax.dart';
 import 'package:origin_vault/core/theme/app_pallete.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/admin_sidebar.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/user_management_page.dart';
+import 'package:origin_vault/screens/producer_level/presentation/pages/add_product_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+class Producerdashboard extends StatefulWidget {
+  const Producerdashboard({Key? key}) : super(key: key);
 
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _ProducerdashboardState createState() => _ProducerdashboardState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _ProducerdashboardState extends State<Producerdashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final supabase =
       SupabaseClient(dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!);
@@ -101,94 +102,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildRecentActivities() {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppPallete.secondarybackgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Recent Activities',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 16.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: _buildActivityCard(
-                  'Activity Type',
-                  'activity message accessed by username',
-                  'Date-Time',
-                ),
-              ),
-              SizedBox(width: 16.w),
-              Expanded(
-                child: _buildActivityCard(
-                  'Activity Type',
-                  'activity message accessed by username',
-                  'Date-Time',
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: TextButton(
-              onPressed: () {
-                // Handle 'View All' action
-              },
-              child: Text('View All',
-                  style: TextStyle(color: Colors.cyan, fontSize: 14.sp)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActivityCard(String title, String description, String date) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppPallete.backgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: AppPallete.textcolor1,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            description,
-            style: TextStyle(color: Colors.white, fontSize: 14.sp),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            date,
-            style: TextStyle(color: Colors.cyan, fontSize: 12.sp),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildBottomNavItem(IconData icon, String label) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
@@ -258,15 +171,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Usermanagement()),
+                    MaterialPageRoute(builder: (context) => AddProductPage()),
                   );
                 },
                 child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Iconsax.people, color: AppPallete.iconColor),
+                    Icon(Iconsax.box, color: AppPallete.iconColor),
                     SizedBox(height: 3),
-                    Text("Users",
+                    Text("Products",
                         style: TextStyle(color: AppPallete.iconColor)),
                   ],
                 ),
@@ -283,9 +196,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Iconsax.monitor_mobbile, color: AppPallete.iconColor),
+                    Icon(Iconsax.message_notif, color: AppPallete.iconColor),
                     SizedBox(height: 3),
-                    Text("System",
+                    Text("Message",
                         style: TextStyle(color: AppPallete.iconColor)),
                   ],
                 ),
@@ -301,9 +214,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Iconsax.status_up, color: AppPallete.iconColor),
+                    Icon(Iconsax.d_cube_scan, color: AppPallete.iconColor),
                     SizedBox(height: 3),
-                    Text("Reports",
+                    Text("Suply Chain",
                         style: TextStyle(color: AppPallete.iconColor)),
                   ],
                 ),
@@ -319,9 +232,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Iconsax.document_text, color: AppPallete.iconColor),
+                    Icon(Iconsax.setting_2, color: AppPallete.iconColor),
                     SizedBox(height: 3),
-                    Text("Audits",
+                    Text("Settings",
                         style: TextStyle(color: AppPallete.iconColor)),
                   ],
                 ),
@@ -341,7 +254,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello Admin',
+                      'Hello Producer',
                       style: TextStyle(color: Colors.white, fontSize: 24.sp),
                     ),
                     Text(
@@ -351,29 +264,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    SizedBox(height: 20.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildDataBox(
-                            'User Count',
-                            _userCount.toString(),
-                            '+11.75%',
-                          ),
-                        ),
-                        SizedBox(width: 15.w),
-                        Expanded(
-                          child: _buildDataBox(
-                            'System Status',
-                            'ACTIVE',
-                            'Up-time Rate: 11.75%',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    _buildRecentActivities(),
+                    )
                   ],
                 ),
               ),

@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:origin_vault/core/common/common_pages/loginpage.dart';
+import 'package:origin_vault/screens/admin_level/presentation/pages/admin_dashboard.dart';
+import 'package:origin_vault/screens/admin_level/presentation/pages/setting_page.dart';
 
 class SideMenu extends StatelessWidget {
   @override
@@ -29,21 +32,30 @@ class SideMenu extends StatelessWidget {
             leading: Icon(Iconsax.element_equal),
             title: Text('Dashboard', style: TextStyle(color: Colors.white)),
             onTap: () {
-              // Navigate to Dashboard
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DashboardScreen()),
+              );
             },
           ),
           ListTile(
             leading: Icon(Iconsax.setting_2),
             title: Text('Settings', style: TextStyle(color: Colors.white)),
             onTap: () {
-              // Navigate to Settings
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
+              );
             },
           ),
           ListTile(
             leading: Icon(Iconsax.logout),
             title: Text('Logout', style: TextStyle(color: Colors.white)),
             onTap: () {
-              // Perform logout action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Loginpage()),
+              );
             },
           ),
         ],
