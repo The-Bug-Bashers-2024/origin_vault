@@ -4,42 +4,55 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:origin_vault/core/theme/app_pallete.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/admin_sidebar.dart';
-import 'package:origin_vault/screens/admin_level/presentation/pages/user_management_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+class Usermanagement extends StatefulWidget {
+  const Usermanagement({Key? key}) : super(key: key);
 
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _UsermanagementState createState() => _UsermanagementState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _UsermanagementState extends State<Usermanagement> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final supabase =
       SupabaseClient(dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!);
-  int _userCount = 0;
+  List<Map<String, dynamic>> _users = [];
+  List<Map<String, dynamic>> _filteredUsers = [];
   bool _isLoading = true;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchUserCount();
+    _fetchUsers();
   }
 
-  Future<void> _fetchUserCount() async {
+  Future<void> _fetchUsers() async {
     try {
       final response = await supabase.from('user_table').select();
-
       setState(() {
-        _userCount = response.length;
+        _users = List<Map<String, dynamic>>.from(response);
+        _filteredUsers = _users;
+        _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching user count: $e');
+      print('Error fetching users: $e');
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _filterUsers(String query) {
+    setState(() {
+      _filteredUsers = _users
+          .where((user) => user['name']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()))
+          .toList();
+    });
   }
 
   Widget _buildTopBar() {
@@ -66,132 +79,109 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDataBox(String title, String value, String subValue) {
+  Widget _buildSearchBar() {
     return Container(
-      height: 150.h, // Add this line to set a fixed height
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: TextField(
+        controller: _searchController,
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: 'User Name',
+          hintStyle: TextStyle(color: Colors.grey),
+          prefixIcon: Icon(Iconsax.search_normal, color: Colors.cyan),
+          filled: true,
+          fillColor: AppPallete.secondarybackgroundColor,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.r),
+            borderSide: BorderSide.none,
+          ),
+        ),
+        onChanged: _filterUsers,
+      ),
+    );
+  }
+
+  Widget _buildUserList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: _filteredUsers.length + 1,
+      itemBuilder: (context, index) {
+        if (index == _filteredUsers.length) {
+          return _buildAddEditButton();
+        }
+        return _buildUserCard(_filteredUsers[index]);
+      },
+    );
+  }
+
+  Widget _buildUserCard(Map<String, dynamic> user) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: AppPallete.secondarybackgroundColor,
         borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyle(color: AppPallete.textcolor1, fontSize: 20.sp),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            value,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('User ID: ${user['user_id'] ?? 'N/A'}',
+                    style: TextStyle(color: Colors.white)),
+                Text('User Name: ${user['name'] ?? 'N/A'}',
+                    style: TextStyle(color: Colors.white)),
+                Text('User Role: ${user['role'] ?? 'N/A'}',
+                    style: TextStyle(color: Colors.white)),
+                Text('Status: ${user['status'] ?? 'N/A'}',
+                    style: TextStyle(color: Colors.white)),
+              ],
             ),
           ),
-          SizedBox(height: 8.h),
-          Text(
-            subValue,
-            style: TextStyle(color: Colors.cyan, fontSize: 14.sp),
+          IconButton(
+            icon: Icon(Iconsax.edit, color: Colors.cyan),
+            onPressed: () {
+              // Handle edit action
+            },
           ),
-          // Remove the SizedBox and Container for the chart/graph
         ],
       ),
     );
   }
 
-  Widget _buildRecentActivities() {
+  Widget _buildAddEditButton() {
     return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppPallete.secondarybackgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Recent Activities',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-            ),
+      margin: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.r),
           ),
-          SizedBox(height: 16.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+        onPressed: () {
+          // Handle add/edit users action
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: _buildActivityCard(
-                  'Activity Type',
-                  'activity message accessed by username',
-                  'Date-Time',
-                ),
-              ),
-              SizedBox(width: 16.w),
-              Expanded(
-                child: _buildActivityCard(
-                  'Activity Type',
-                  'activity message accessed by username',
-                  'Date-Time',
-                ),
-              ),
+              Icon(Iconsax.add_circle, color: Colors.white),
+              SizedBox(width: 8.w),
+              Text('Add/Edit Users',
+                  style: TextStyle(color: Colors.white, fontSize: 16.sp)),
             ],
           ),
-          SizedBox(height: 16.h),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: TextButton(
-              onPressed: () {
-                // Handle 'View All' action
-              },
-              child: Text('View All',
-                  style: TextStyle(color: Colors.cyan, fontSize: 14.sp)),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildActivityCard(String title, String description, String date) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppPallete.backgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: AppPallete.textcolor1,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            description,
-            style: TextStyle(color: Colors.white, fontSize: 14.sp),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            date,
-            style: TextStyle(color: Colors.cyan, fontSize: 12.sp),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavItem(IconData icon, String label) {
+  Widget _buildBottomNavItem(IconData icon, String label, EdgeInsets padding) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
+      padding: padding,
       child: InkWell(
         onTap: () {
           print("$label button tapped");
@@ -335,47 +325,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _buildTopBar(),
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hello Admin',
-                      style: TextStyle(color: Colors.white, fontSize: 24.sp),
-                    ),
-                    Text(
-                      'Welcome Back!',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: Text(
+                      'User Management',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildDataBox(
-                            'User Count',
-                            _userCount.toString(),
-                            '+11.75%',
-                          ),
-                        ),
-                        SizedBox(width: 15.w),
-                        Expanded(
-                          child: _buildDataBox(
-                            'System Status',
-                            'ACTIVE',
-                            'Up-time Rate: 11.75%',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    _buildRecentActivities(),
-                  ],
-                ),
+                  ),
+                  _buildSearchBar(),
+                  _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : _buildUserList(),
+                ],
               ),
             ),
           ),

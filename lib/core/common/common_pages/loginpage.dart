@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:origin_vault/core/common/common_pages/forgotpasswordpage.dart';
 import 'package:origin_vault/core/common/common_pages/registerpage.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/admin_dashboard.dart';
+import 'package:origin_vault/screens/consumer_level/presentation/pages/consumer_dashboard.dart';
+import 'package:origin_vault/screens/producer_level/presentation/pages/producer_dashboard.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Loginpage extends StatefulWidget {
@@ -34,7 +36,7 @@ class _LoginpageState extends State<Loginpage> {
         // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
-          builder: (context) => DashboardScreen(),
+          builder: (context) => Consumerdashboard(),
         ),
       );
     }
