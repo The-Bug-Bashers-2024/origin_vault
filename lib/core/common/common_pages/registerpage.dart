@@ -49,19 +49,22 @@ class _RegisterPageState extends State<RegisterPage> {
         username: username,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign-up Successful')),
-      );
-      // Navigate to login page or home page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Loginpage()),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign-up Successful')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Loginpage()),
+        );
+      }
     } catch (e) {
-      // Handle sign-up error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      // Handling sign-up error
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
     }
   }
 
