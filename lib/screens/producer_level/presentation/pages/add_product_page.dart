@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:origin_vault/blockchain_service/blockchain_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:iconsax/iconsax.dart';
@@ -12,13 +13,14 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../core/theme/app_pallete.dart';
 
 class AddProductPage extends StatefulWidget {
-  const AddProductPage({Key? key}) : super(key: key);
+  const AddProductPage({super.key});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
 }
 
 class _AddProductPageState extends State<AddProductPage> {
+  final BlockchainService blockchainService = BlockchainService();
   final _formKey = GlobalKey<FormState>();
   final supabase =
       SupabaseClient(dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!);
@@ -37,6 +39,7 @@ class _AddProductPageState extends State<AddProductPage> {
     super.initState();
     _productHexCode = _generate32HexCode();
     _farmerHexCode = _generate32HexCode();
+    blockchainService.initialize();
   }
 
   @override
@@ -72,9 +75,19 @@ class _AddProductPageState extends State<AddProductPage> {
           'image_url': imageUrl,
         });
 
+        // Add to product to blockchain
+        final String transactionHash = await blockchainService.createProduct(
+          _productNameController.text,
+          _productOriginController.text,
+          '${_productTypeController.text}, Quantity: ${_productQuantityController.text}',
+          imageUrl ?? '',
+        );
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Product added successfully')),
+            SnackBar(
+                content: Text(
+                    'Product added successfully. Transaction Hash: $transactionHash')),
           );
           _resetForm();
         }

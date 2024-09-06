@@ -3,9 +3,9 @@ import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 
 class BlockchainService {
-  final String rpcUrl = "https://0.0.0.0:7545";
+  final String rpcUrl = "https://127.0.0.1:7545";
   final String privateKey =
-      "0xc61442ba500bb2dac2163c559c80ba1bf346e1400435704f62ef68eca8fa256f";
+      "0x23ac605b59643e9bcc7050f31227478031e5147709f86708cbe30cdfba1e3651";
 
   late Web3Client ethClient;
   late EthPrivateKey credentials;
@@ -23,11 +23,11 @@ class BlockchainService {
     String abi = await rootBundle
         .loadString("assets/abi.json"); // Ensure the ABI file is in assets
     contractAddress = EthereumAddress.fromHex(
-        "<YOUR_CONTRACT_ADDRESS>"); // Replace with deployed contract address
+        "0x8872b80CE2a03fC71F47915ABD8b413F7DBDFBDD"); // Replace with deployed contract address
 
     // Create the contract object
     contract = DeployedContract(
-      ContractAbi.fromJson(abi, "YourContractName"),
+      ContractAbi.fromJson(abi, "FoodSafetyModernization.sol"),
       contractAddress,
     );
   }

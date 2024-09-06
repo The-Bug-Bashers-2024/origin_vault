@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:origin_vault/core/theme/app_pallete.dart';
 import 'package:origin_vault/screens/admin_level/presentation/pages/admin_sidebar.dart';
-import 'package:origin_vault/screens/admin_level/presentation/pages/user_management_page.dart';
 import 'package:origin_vault/screens/producer_level/presentation/pages/add_product_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -36,7 +35,6 @@ class _ProducerdashboardState extends State<Producerdashboard> {
         _userCount = response.length;
       });
     } catch (e) {
-      print('Error fetching user count: $e');
       setState(() {
         _isLoading = false;
       });
@@ -171,7 +169,7 @@ class _ProducerdashboardState extends State<Producerdashboard> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddProductPage()),
+                    MaterialPageRoute(builder: (context) => const AddProductPage()),
                   );
                 },
                 child: const Column(
